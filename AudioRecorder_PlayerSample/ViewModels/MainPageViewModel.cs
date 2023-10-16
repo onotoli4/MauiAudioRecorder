@@ -51,7 +51,9 @@ namespace AudioRecorder_PlayerSample.ViewModels
             SendCommand = new Command(SendRecording);
             PauseAudioCommand = new Command(PauseAudio);
             PlayAudioCommand = new Command(StartPlayingAudio);
-            PauseCommand = new Command(PauseRecording);          
+            PauseCommand = new Command(PauseRecording);
+
+            FillAudioList();
         }
 
 
@@ -285,7 +287,27 @@ namespace AudioRecorder_PlayerSample.ViewModels
         {
             var alert = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to delete the audio?", "Yes", "No");
             if (alert)
+            {
                 Audios.Remove(obj);
+                File.Delete(obj.AudioURL);
+            }
+        }
+        private void FillAudioList()
+        {
+            var recordings = Directory.GetFiles(Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments));
+            foreach (var recording in recordings)
+            {
+                try
+                {
+                    Audio recordedFile = new() { AudioURL = recording };
+                    if (recordedFile != null)
+                    {
+                        recordedFile.AudioName = Path.GetFileName(recording);
+                        Audios.Insert(0, recordedFile);
+                    }
+                }
+                catch { }
+            }
         }
         public async Task<PermissionStatus> RequestandCheckPermission()
         {

@@ -32,6 +32,8 @@ namespace AudioRecorder_PlayerSample.Platforms.Service
                 mediaRecorder.SetAudioSource(AudioSource.Mic);
                 mediaRecorder.SetOutputFormat(OutputFormat.AacAdts);
                 mediaRecorder.SetAudioEncoder(AudioEncoder.Aac);
+                mediaRecorder.SetAudioEncodingBitRate(16 * 44100);
+                mediaRecorder.SetAudioSamplingRate(44100);
                 mediaRecorder.SetOutputFile(storagePath);
                 mediaRecorder.Prepare();
                 mediaRecorder.Start();
